@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Session Feedback</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,8 +14,8 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f172a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,13 +24,15 @@
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             text-align: center;
             max-width: 800px;
             width: 100%;
+            border: 1px solid rgba(79, 172, 254, 0.2);
         }
 
         .page {
@@ -37,225 +41,351 @@
 
         .page.active {
             display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 10px;
+            color: #ffffff;
+            margin-bottom: 12px;
             font-size: 2.5em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         h2 {
-            color: #666;
+            color: #f8fafc;
             margin-bottom: 30px;
-            font-size: 1.8em;
+            font-size: 2em;
+            font-weight: 600;
         }
 
         .subtitle {
-            color: #888;
+            color: #cbd5e1;
             margin-bottom: 40px;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            font-weight: 400;
         }
 
         .emoji-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 20px;
             margin: 40px 0;
         }
 
         .emoji-button {
-            background: #f8f9fa;
-            border: 3px solid #e9ecef;
-            border-radius: 15px;
-            padding: 30px 20px;
+            background: #232342;
+            border: 2px solid #4a5568;
+            border-radius: 12px;
+            padding: 32px 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 4em;
+            font-size: 3.5em;
             position: relative;
-            overflow: hidden;
         }
 
         .emoji-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.25);
+            border-color: #4facfe;
+            background: #2d3748;
         }
 
         .emoji-button.selected {
-            background: #667eea;
-            border-color: #667eea;
-            transform: scale(1.1);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #4facfe;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(79, 172, 254, 0.4);
         }
 
         .emoji-button .label {
             display: block;
-            font-size: 0.4em;
-            margin-top: 10px;
-            color: #666;
-            font-weight: bold;
+            font-size: 0.35em;
+            margin-top: 12px;
+            color: #a0aec0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .emoji-button.selected .label {
-            color: white;
+            color: #ffffff;
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            border-radius: 25px;
+            padding: 16px 32px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 20px;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
         }
 
         .submit-btn:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.4);
         }
 
         .submit-btn:disabled {
-            background: #ccc;
+            background: #4a5568;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .nav-buttons {
             margin-top: 30px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .nav-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            background: #2d3748;
+            color: #e2e8f0;
+            border: 1px solid #4a5568;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
         }
 
         .nav-btn:hover {
-            background: #495057;
-            transform: translateY(-2px);
+            background: #4a5568;
+            border-color: #4facfe;
+            color: #ffffff;
+            transform: translateY(-1px);
         }
 
         .thank-you {
             font-size: 1.5em;
-            color: #28a745;
-            margin: 20px 0;
+            color: #22c55e;
+            margin: 24px 0;
+            font-weight: 600;
         }
 
         .stats-container {
             text-align: left;
-            margin-top: 20px;
+            margin-top: 24px;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px;
-            margin: 10px 0;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 12px 0;
+            background: #1e293b;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.2s ease;
+        }
+
+        .stat-item:hover {
+            background: #334155;
+            transform: translateX(2px);
         }
 
         .stat-emoji {
-            font-size: 2em;
-            margin-right: 15px;
+            font-size: 2.2em;
+            margin-right: 16px;
         }
 
         .stat-info {
             flex: 1;
         }
 
+        .stat-info h3 {
+            color: #f1f5f9;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
         .stat-count {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #3b82f6;
         }
 
         .date-filter {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-filter label {
+            color: #e2e8f0;
+            font-weight: 500;
         }
 
         .date-filter input {
             padding: 8px 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1em;
+            border: 2px solid #475569;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: border-color 0.2s ease;
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        .date-filter input:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
 
         .percentage {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-top: 4px;
         }
 
         .total-votes {
-            background: #e3f2fd;
-            border-left-color: #2196f3;
-            font-weight: bold;
-            text-align: center;
+            background: #1e293b;
+            border-left-color: #0ea5e9;
+            font-weight: 600;
+        }
+
+        .total-votes .stat-count {
+            color: #0ea5e9;
         }
 
         .coach-login {
-            margin-top: 20px;
+            margin-top: 24px;
         }
 
         .coach-login input {
-            padding: 10px;
-            margin: 5px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 8px;
+            border: 2px solid #475569;
+            border-radius: 6px;
             font-size: 1em;
+            width: 250px;
+            transition: border-color 0.2s ease;
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        .coach-login input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .coach-login input::placeholder {
+            color: #94a3b8;
         }
 
         .error-message {
-            color: #dc3545;
-            margin-top: 10px;
+            color: #ef4444;
+            margin-top: 12px;
+            font-weight: 500;
         }
 
         .success-animation {
-            animation: bounce 0.6s ease-in-out;
+            animation: successPulse 0.4s ease-out;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         .clear-data-btn {
-            background: #dc3545;
+            background: #dc2626;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 15px;
+            padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9em;
-            margin-top: 10px;
+            margin-top: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
         .clear-data-btn:hover {
-            background: #c82333;
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+                margin: 12px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .emoji-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            
+            .emoji-button {
+                font-size: 2.8em;
+                padding: 24px 16px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .coach-login input {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .emoji-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .date-filter {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
     </style>
 </head>
@@ -263,54 +393,57 @@
     <div class="container">
         <!-- Kids Feedback Page -->
         <div class="page active" id="feedbackPage">
-            <h1>🎉 How was your training session? 🎉</h1>
-            <p class="subtitle">Click on the emoji that shows how you feel!</p>
+            <div class="logo">📊</div>
+            <h1>Training Session Feedback</h1>
+            <p class="subtitle">Please rate your training session experience</p>
             
             <div class="emoji-container">
                 <div class="emoji-button" onclick="selectEmoji(this, 'very-happy', '😄')">
                     😄
-                    <span class="label">AMAZING!</span>
+                    <span class="label">Excellent</span>
                 </div>
                 <div class="emoji-button" onclick="selectEmoji(this, 'happy', '😊')">
                     😊
-                    <span class="label">GOOD!</span>
+                    <span class="label">Good</span>
                 </div>
                 <div class="emoji-button" onclick="selectEmoji(this, 'neutral', '😐')">
                     😐
-                    <span class="label">OKAY</span>
+                    <span class="label">Average</span>
                 </div>
                 <div class="emoji-button" onclick="selectEmoji(this, 'sad', '😞')">
                     😞
-                    <span class="label">NOT GOOD</span>
+                    <span class="label">Poor</span>
                 </div>
             </div>
 
             <button class="submit-btn" id="submitBtn" onclick="submitFeedback()" disabled>
-                Submit My Feedback! ✨
+                Submit Feedback
             </button>
 
             <div class="nav-buttons">
-                <button class="nav-btn" onclick="showCoachLogin()">Coach Login</button>
+                <button class="nav-btn" onclick="showCoachLogin()">Staff Login</button>
             </div>
         </div>
 
         <!-- Thank You Page -->
         <div class="page" id="thankYouPage">
-            <h1>🎉 Thank You! 🎉</h1>
-            <div class="thank-you">Your feedback has been recorded!</div>
-            <p>We appreciate you sharing how you felt about today's training session.</p>
+            <div class="logo">✓</div>
+            <h1>Thank You</h1>
+            <div class="thank-you">Your feedback has been recorded successfully</div>
+            <p class="subtitle">We appreciate your input and will use it to improve our training sessions</p>
             
             <div class="nav-buttons">
-                <button class="nav-btn" onclick="showPage('feedbackPage')">Give More Feedback</button>
-                <button class="nav-btn" onclick="showCoachLogin()">Coach Login</button>
+                <button class="nav-btn" onclick="showPage('feedbackPage')">Submit Another Response</button>
+                <button class="nav-btn" onclick="showCoachLogin()">Staff Login</button>
             </div>
         </div>
 
         <!-- Coach Login Page -->
         <div class="page" id="loginPage">
-            <h2>Coach Login</h2>
+            <div class="logo">🔐</div>
+            <h2>Staff Login</h2>
             <div class="coach-login">
-                <input type="password" id="coachPassword" placeholder="Enter coach password" />
+                <input type="password" id="coachPassword" placeholder="Enter password" />
                 <br>
                 <button class="nav-btn" onclick="checkPassword()">Login</button>
                 <div class="error-message" id="loginError"></div>
@@ -322,7 +455,8 @@
 
         <!-- Statistics Page -->
         <div class="page" id="statsPage">
-            <h2>📊 Training Session Statistics</h2>
+            <div class="logo">📈</div>
+            <h2>Feedback Analytics</h2>
             
             <div class="date-filter">
                 <label>Filter by date:</label>
@@ -344,37 +478,32 @@
     <script>
         let selectedEmoji = null;
         let selectedValue = null;
-        const COACH_PASSWORD = "coach123"; // Change this to your preferred password
+        const COACH_PASSWORD = "coach123";
 
-        // Initialize data structure
         function initializeData() {
-            if (!localStorage.getItem('feedbackData')) {
+            const data = localStorage.getItem('feedbackData');
+            if (!data) {
                 localStorage.setItem('feedbackData', JSON.stringify([]));
             }
         }
 
         function selectEmoji(element, value, emoji) {
-            // Remove previous selection
             document.querySelectorAll('.emoji-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
             
-            // Add selection to clicked element
             element.classList.add('selected');
             selectedEmoji = emoji;
             selectedValue = value;
             
-            // Enable submit button
             document.getElementById('submitBtn').disabled = false;
         }
 
         function submitFeedback() {
             if (!selectedEmoji || !selectedValue) return;
 
-            // Get current data
             const data = JSON.parse(localStorage.getItem('feedbackData') || '[]');
             
-            // Add new feedback
             const feedback = {
                 emoji: selectedEmoji,
                 value: selectedValue,
@@ -385,13 +514,11 @@
             data.push(feedback);
             localStorage.setItem('feedbackData', JSON.stringify(data));
 
-            // Show success animation
             document.querySelector('.container').classList.add('success-animation');
             setTimeout(() => {
                 document.querySelector('.container').classList.remove('success-animation');
-            }, 600);
+            }, 400);
 
-            // Reset selection
             selectedEmoji = null;
             selectedValue = null;
             document.querySelectorAll('.emoji-button').forEach(btn => {
@@ -399,7 +526,6 @@
             });
             document.getElementById('submitBtn').disabled = true;
 
-            // Show thank you page
             showPage('thankYouPage');
         }
 
@@ -433,19 +559,17 @@
             const data = JSON.parse(localStorage.getItem('feedbackData') || '[]');
             const dateFilter = document.getElementById('dateFilter').value;
             
-            // Filter data by date if specified
             let filteredData = data;
             if (dateFilter) {
                 const filterDate = new Date(dateFilter).toLocaleDateString();
                 filteredData = data.filter(item => item.date === filterDate);
             }
 
-            // Count emoji votes
             const emojiCounts = {
-                '😄': { count: 0, label: 'AMAZING!', value: 'very-happy' },
-                '😊': { count: 0, label: 'GOOD!', value: 'happy' },
-                '😐': { count: 0, label: 'OKAY', value: 'neutral' },
-                '😞': { count: 0, label: 'NOT GOOD', value: 'sad' }
+                '😄': { count: 0, label: 'Excellent', value: 'very-happy' },
+                '😊': { count: 0, label: 'Good', value: 'happy' },
+                '😐': { count: 0, label: 'Average', value: 'neutral' },
+                '😞': { count: 0, label: 'Poor', value: 'sad' }
             };
 
             filteredData.forEach(item => {
@@ -454,17 +578,16 @@
                 }
             });
 
-            // Calculate total votes
             const totalVotes = filteredData.length;
 
-            // Generate stats HTML
             const statsContainer = document.getElementById('statsContainer');
             let statsHTML = `
                 <div class="stat-item total-votes">
                     <div class="stat-info">
-                        <div class="stat-count">Total Votes: ${totalVotes}</div>
+                        <h3>Total Responses</h3>
                         <div class="percentage">${dateFilter ? 'For selected date' : 'All time'}</div>
                     </div>
+                    <div class="stat-count">${totalVotes}</div>
                 </div>
             `;
 
@@ -474,7 +597,7 @@
                     <div class="stat-item">
                         <div class="stat-emoji">${emoji}</div>
                         <div class="stat-info">
-                            <div>${data.label}</div>
+                            <h3>${data.label}</h3>
                             <div class="percentage">${percentage}% of responses</div>
                         </div>
                         <div class="stat-count">${data.count}</div>
@@ -497,7 +620,6 @@
             }
         }
 
-        // Allow Enter key to submit password
         document.getElementById('coachPassword').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
