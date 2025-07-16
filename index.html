@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Session Feedback</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .emoji-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .emoji-button {
+            background: #f8f9fa;
+            border: 3px solid #e9ecef;
+            border-radius: 15px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 4em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emoji-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .emoji-button.selected {
+            background: #667eea;
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .emoji-button .label {
+            display: block;
+            font-size: 0.4em;
+            margin-top: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .emoji-button.selected .label {
+            color: white;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #495057;
+            transform: translateY(-2px);
+        }
+
+        .thank-you {
+            font-size: 1.5em;
+            color: #28a745;
+            margin: 20px 0;
+        }
+
+        .stats-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-emoji {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-count {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .date-filter {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .date-filter input {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .percentage {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .total-votes {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .coach-login {
+            margin-top: 20px;
+        }
+
+        .coach-login input {
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .success-animation {
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .clear-data-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .clear-data-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Kids Feedback Page -->
+        <div class="page active" id="feedbackPage">
+            <h1>🎉 How was your training session? 🎉</h1>
+            <p class="subtitle">Click on the emoji that shows how you feel!</p>
+            
+            <div class="emoji-container">
+                <div class="emoji-button" onclick="selectEmoji(this, 'very-happy', '😄')">
+                    😄
+                    <span class="label">AMAZING!</span>
+                </div>
+                <div class="emoji-button" onclick="selectEmoji(this, 'happy', '😊')">
+                    😊
+                    <span class="label">GOOD!</span>
+                </div>
+                <div class="emoji-button" onclick="selectEmoji(this, 'neutral', '😐')">
+                    😐
+                    <span class="label">OKAY</span>
+                </div>
+                <div class="emoji-button" onclick="selectEmoji(this, 'sad', '😞')">
+                    😞
+                    <span class="label">NOT GOOD</span>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitFeedback()" disabled>
+                Submit My Feedback! ✨
+            </button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showCoachLogin()">Coach Login</button>
+            </div>
+        </div>
+
+        <!-- Thank You Page -->
+        <div class="page" id="thankYouPage">
+            <h1>🎉 Thank You! 🎉</h1>
+            <div class="thank-you">Your feedback has been recorded!</div>
+            <p>We appreciate you sharing how you felt about today's training session.</p>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showPage('feedbackPage')">Give More Feedback</button>
+                <button class="nav-btn" onclick="showCoachLogin()">Coach Login</button>
+            </div>
+        </div>
+
+        <!-- Coach Login Page -->
+        <div class="page" id="loginPage">
+            <h2>Coach Login</h2>
+            <div class="coach-login">
+                <input type="password" id="coachPassword" placeholder="Enter coach password" />
+                <br>
+                <button class="nav-btn" onclick="checkPassword()">Login</button>
+                <div class="error-message" id="loginError"></div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showPage('feedbackPage')">Back to Feedback</button>
+            </div>
+        </div>
+
+        <!-- Statistics Page -->
+        <div class="page" id="statsPage">
+            <h2>📊 Training Session Statistics</h2>
+            
+            <div class="date-filter">
+                <label>Filter by date:</label>
+                <input type="date" id="dateFilter" onchange="updateStats()" />
+                <button class="nav-btn" onclick="clearDateFilter()">Show All</button>
+            </div>
+
+            <div class="stats-container" id="statsContainer">
+                <!-- Stats will be populated here -->
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="showPage('feedbackPage')">Back to Feedback</button>
+                <button class="clear-data-btn" onclick="clearAllData()">Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedEmoji = null;
+        let selectedValue = null;
+        const COACH_PASSWORD = "coach123"; // Change this to your preferred password
+
+        // Initialize data structure
+        function initializeData() {
+            if (!localStorage.getItem('feedbackData')) {
+                localStorage.setItem('feedbackData', JSON.stringify([]));
+            }
+        }
+
+        function selectEmoji(element, value, emoji) {
+            // Remove previous selection
+            document.querySelectorAll('.emoji-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selection to clicked element
+            element.classList.add('selected');
+            selectedEmoji = emoji;
+            selectedValue = value;
+            
+            // Enable submit button
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitFeedback() {
+            if (!selectedEmoji || !selectedValue) return;
+
+            // Get current data
+            const data = JSON.parse(localStorage.getItem('feedbackData') || '[]');
+            
+            // Add new feedback
+            const feedback = {
+                emoji: selectedEmoji,
+                value: selectedValue,
+                timestamp: new Date().toISOString(),
+                date: new Date().toLocaleDateString()
+            };
+            
+            data.push(feedback);
+            localStorage.setItem('feedbackData', JSON.stringify(data));
+
+            // Show success animation
+            document.querySelector('.container').classList.add('success-animation');
+            setTimeout(() => {
+                document.querySelector('.container').classList.remove('success-animation');
+            }, 600);
+
+            // Reset selection
+            selectedEmoji = null;
+            selectedValue = null;
+            document.querySelectorAll('.emoji-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('submitBtn').disabled = true;
+
+            // Show thank you page
+            showPage('thankYouPage');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function showCoachLogin() {
+            showPage('loginPage');
+            document.getElementById('coachPassword').focus();
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('coachPassword').value;
+            const errorElement = document.getElementById('loginError');
+            
+            if (password === COACH_PASSWORD) {
+                errorElement.textContent = '';
+                document.getElementById('coachPassword').value = '';
+                showPage('statsPage');
+                updateStats();
+            } else {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        function updateStats() {
+            const data = JSON.parse(localStorage.getItem('feedbackData') || '[]');
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            // Filter data by date if specified
+            let filteredData = data;
+            if (dateFilter) {
+                const filterDate = new Date(dateFilter).toLocaleDateString();
+                filteredData = data.filter(item => item.date === filterDate);
+            }
+
+            // Count emoji votes
+            const emojiCounts = {
+                '😄': { count: 0, label: 'AMAZING!', value: 'very-happy' },
+                '😊': { count: 0, label: 'GOOD!', value: 'happy' },
+                '😐': { count: 0, label: 'OKAY', value: 'neutral' },
+                '😞': { count: 0, label: 'NOT GOOD', value: 'sad' }
+            };
+
+            filteredData.forEach(item => {
+                if (emojiCounts[item.emoji]) {
+                    emojiCounts[item.emoji].count++;
+                }
+            });
+
+            // Calculate total votes
+            const totalVotes = filteredData.length;
+
+            // Generate stats HTML
+            const statsContainer = document.getElementById('statsContainer');
+            let statsHTML = `
+                <div class="stat-item total-votes">
+                    <div class="stat-info">
+                        <div class="stat-count">Total Votes: ${totalVotes}</div>
+                        <div class="percentage">${dateFilter ? 'For selected date' : 'All time'}</div>
+                    </div>
+                </div>
+            `;
+
+            Object.entries(emojiCounts).forEach(([emoji, data]) => {
+                const percentage = totalVotes > 0 ? ((data.count / totalVotes) * 100).toFixed(1) : 0;
+                statsHTML += `
+                    <div class="stat-item">
+                        <div class="stat-emoji">${emoji}</div>
+                        <div class="stat-info">
+                            <div>${data.label}</div>
+                            <div class="percentage">${percentage}% of responses</div>
+                        </div>
+                        <div class="stat-count">${data.count}</div>
+                    </div>
+                `;
+            });
+
+            statsContainer.innerHTML = statsHTML;
+        }
+
+        function clearDateFilter() {
+            document.getElementById('dateFilter').value = '';
+            updateStats();
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all feedback data? This action cannot be undone.')) {
+                localStorage.removeItem('feedbackData');
+                updateStats();
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.getElementById('coachPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Initialize the app
+        initializeData();
+    </script>
+</body>
+</html>
