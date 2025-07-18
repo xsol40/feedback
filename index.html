@@ -184,35 +184,6 @@
             color: #ffffff;
         }
 
-        .submit-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.1em;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.4);
-        }
-
-        .submit-btn:disabled {
-            background: #4a5568;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
         .nav-buttons {
             margin-top: 30px;
             display: flex;
@@ -480,27 +451,12 @@
                 </div>
             </div>
 
-            <button class="submit-btn" id="submitBtn" onclick="submitFeedback()" disabled>
-                Submit Feedback
-            </button>
-
             <div class="nav-buttons">
                 <button class="nav-btn" onclick="showCoachLogin()">Staff Login</button>
             </div>
         </div>
 
-        <!-- Thank You Page -->
-        <div class="page" id="thankYouPage">
-            <div class="logo">✓</div>
-            <h1>Thank You</h1>
-            <div class="thank-you">Your feedback has been recorded successfully</div>
-            <p class="subtitle">We appreciate your input and will use it to improve our training sessions</p>
-            
-            <div class="nav-buttons">
-                <button class="nav-btn" onclick="showPage('feedbackPage')">Submit Another Response</button>
-                <button class="nav-btn" onclick="showCoachLogin()">Staff Login</button>
-            </div>
-        </div>
+
 
         <!-- Coach Login Page -->
         <div class="page" id="loginPage">
@@ -558,15 +514,15 @@
         }
 
         function selectEmoji(element, value, emoji) {
-            document.querySelectorAll('.emoji-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
+            // Add visual feedback
             element.classList.add('selected');
             selectedEmoji = emoji;
             selectedValue = value;
             
-            document.getElementById('submitBtn').disabled = false;
+            // Auto-submit after a short delay for better UX
+            setTimeout(() => {
+                submitFeedback();
+            }, 300);
         }
 
         function submitFeedback() {
@@ -584,19 +540,20 @@
             data.push(feedback);
             localStorage.setItem('feedbackData', JSON.stringify(data));
 
+            // Success animation
             document.querySelector('.container').classList.add('success-animation');
             setTimeout(() => {
                 document.querySelector('.container').classList.remove('success-animation');
             }, 400);
 
-            selectedEmoji = null;
-            selectedValue = null;
-            document.querySelectorAll('.emoji-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            document.getElementById('submitBtn').disabled = true;
-
-            showPage('thankYouPage');
+            // Reset selection after a brief delay to show the selection
+            setTimeout(() => {
+                selectedEmoji = null;
+                selectedValue = null;
+                document.querySelectorAll('.emoji-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+            }, 800);
         }
 
         function showPage(pageId) {
